@@ -34,18 +34,18 @@ impl AttractorParam for LorenzAttractor {
         LorenzAttractor {}
     }
 
-    fn random_point() -> Vec3 {
-        vec3(
+    fn random_point() -> Vec3A {
+        vec3a(
             random_range(-30.0, 30.0),
             random_range(-30.0, 30.0),
             random_range(0.0, 60.0),
         )
     }
 
-    fn make_next(p: &Vec3) -> Vec3 {
+    fn make_next(p: &Vec3A) -> Vec3A {
         let dx = SIGMA * (p.y - p.x);
         let dy = p.x * (RHO - p.z) - p.y;
         let dz = p.x * p.y - BETA * p.z;
-        *p + vec3(dx, dy, dz) * Self::DELTA_T
+        *p + vec3a(dx, dy, dz) * Self::DELTA_T
     }
 }

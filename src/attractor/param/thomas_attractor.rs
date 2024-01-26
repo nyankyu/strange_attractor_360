@@ -32,18 +32,18 @@ impl AttractorParam for ThomasAttractor {
         ThomasAttractor {}
     }
 
-    fn random_point() -> Vec3 {
-        vec3(
+    fn random_point() -> Vec3A {
+        vec3a(
             random_range(-10.0, 10.0),
             random_range(-10.0, 10.0),
             random_range(-10.0, 10.0),
         )
     }
 
-    fn make_next(p: &Vec3) -> Vec3 {
+    fn make_next(p: &Vec3A) -> Vec3A {
         let dx = p.y.sin() - B * p.x;
         let dy = p.z.sin() - B * p.y;
         let dz = p.x.sin() - B * p.z;
-        *p + vec3(dx, dy, dz) * Self::DELTA_T
+        *p + vec3a(dx, dy, dz) * Self::DELTA_T
     }
 }

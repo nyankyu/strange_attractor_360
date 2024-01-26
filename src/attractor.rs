@@ -36,18 +36,18 @@ pub(crate) trait AttractorParam {
     const ROTAION_Z: f32;
 
     fn new() -> Self;
-    fn random_point() -> Vec3;
-    fn make_next(p: &Vec3) -> Vec3;
+    fn random_point() -> Vec3A;
+    fn make_next(p: &Vec3A) -> Vec3A;
 }
 
 pub(crate) struct Attractor<Param: AttractorParam> {
     _param: Param,
     orbits: Vec<Particle>,
     theta: f32,
-    rotation: Mat3,
+    rotation: Mat3A,
     /// direction right: +y, left: -y, top: +z, bottom: -z, front: +x, back: -x
-    camera: Vec3,
-    center: Vec3,
+    camera: Vec3A,
+    center: Vec3A,
 }
 
 impl<Param: AttractorParam> Attractor<Param> {
@@ -56,16 +56,16 @@ impl<Param: AttractorParam> Attractor<Param> {
             _param: Param::new(),
             orbits: (0..Param::ORBIT_NUM).map(|_| Particle::new::<Param>()).collect(),
             theta: 0.0,
-            rotation: Mat3::ZERO,
-            camera: vec3(Param::CAMERA_X, Param::CAMERA_Y, Param::CAMERA_Z),
-            center: vec3(Param::CENTER_X, Param::CENTER_Y, Param::CENTER_Z),
+            rotation: Mat3A::ZERO,
+            camera: vec3a(Param::CAMERA_X, Param::CAMERA_Y, Param::CAMERA_Z),
+            center: vec3a(Param::CENTER_X, Param::CENTER_Y, Param::CENTER_Z),
         }
     }
 
     pub(crate) fn update(&mut self) {
         self.orbits.iter_mut().for_each(|p| p.update::<Param>());
         self.theta += Param::DELTA_THETA;
-        self.rotation = Mat3::from_euler(
+        self.rotation = Mat3A::from_euler(
             nannou::glam::EulerRot::ZYX,
             self.theta * Param::ROTAION_X,
             self.theta * Param::ROTAION_Y,
@@ -77,6 +77,6 @@ impl<Param: AttractorParam> Attractor<Param> {
         self.orbits.iter().for_each(|particle| {
             particle.draw::<Param>(&draw, self.rotation, self.center, self.camera)
         });
-        
+
     }
 }

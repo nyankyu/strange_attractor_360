@@ -32,18 +32,18 @@ impl AttractorParam for HalvorsenAttractor {
         HalvorsenAttractor {}
     }
 
-    fn random_point() -> Vec3 {
-        vec3(
+    fn random_point() -> Vec3A {
+        vec3a(
             random_range(-2.0, 2.0),
             random_range(-2.0, 2.0),
             random_range(-2.0, 2.0),
         )
     }
 
-    fn make_next(p: &Vec3) -> Vec3 {
-        let dx = -vec3(A, 4.0, 4.0).dot(*p) - p.y * p.y;
-        let dy = -vec3(4.0, A, 4.0).dot(*p) - p.z * p.z;
-        let dz = -vec3(4.0, 4.0, A).dot(*p) - p.x * p.x;
-        *p + vec3(dx, dy, dz) * Self::DELTA_T
+    fn make_next(p: &Vec3A) -> Vec3A {
+        let dx = -vec3a(A, 4.0, 4.0).dot(*p) - p.y * p.y;
+        let dy = -vec3a(4.0, A, 4.0).dot(*p) - p.z * p.z;
+        let dz = -vec3a(4.0, 4.0, A).dot(*p) - p.x * p.x;
+        *p + vec3a(dx, dy, dz) * Self::DELTA_T
     }
 }

@@ -3,8 +3,8 @@ use nannou::{glam::Vec3Swizzles, prelude::*};
 use super::AttractorParam;
 
 pub(super) struct Particle {
-    orbit: Vec<Vec3>,
-    last: Vec3,
+    orbit: Vec<Vec3A>,
+    last: Vec3A,
 }
 
 impl Particle {
@@ -30,9 +30,9 @@ impl Particle {
     pub(super) fn draw<Param: AttractorParam>(
         &self,
         draw: &Draw,
-        rotation: Mat3,
-        center: Vec3,
-        camera: Vec3,
+        rotation: Mat3A,
+        center: Vec3A,
+        camera: Vec3A,
     ) {
         let mut coordinate_depth = self.orbit.iter().map(|&p| {
             let rotated = rotation * (p - center);
@@ -83,7 +83,7 @@ impl Particle {
     }
 }
 
-fn equirectangular(camera: &Vec3, p: &Vec3) -> Vec2 {
+fn equirectangular(camera: &Vec3A, p: &Vec3A) -> Vec2 {
     let dist_xy = camera.xy().distance(p.xy());
     let longitude = ((p.x - camera.x) / dist_xy).acos() * (p.y - camera.y).signum();
     let latitude = ((p.z - camera.z) / dist_xy).atan();
