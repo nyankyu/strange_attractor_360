@@ -1,8 +1,8 @@
 mod attractor;
 
+use attractor::*;
 use nannou::prelude::*;
 use std::process::exit;
-use attractor::*;
 
 const RECORDING: bool = false;
 
@@ -85,9 +85,12 @@ fn sub_view(app: &App, _model: &Model, frame: Frame) {
 
     draw.background().color(GRAY);
 
-    let fps = app.duration.updates_per_second();
-    draw.text(&format!("{:.1}", fps))
-        .color(BLACK);
+    draw.text(&format!(
+        "FPS: {:.1}\nframe: {}",
+        app.duration.updates_per_second(),
+        app.elapsed_frames()
+    ))
+    .color(BLACK);
 
     draw.to_frame(app, &frame).unwrap();
 }
