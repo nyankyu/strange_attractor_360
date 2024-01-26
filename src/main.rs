@@ -9,14 +9,17 @@ const RECORDING: bool = false;
 const WINDOW_H: u32 = if RECORDING { 2160 } else { 800 };
 const WINDOW_W: u32 = WINDOW_H * 2;
 
+const SUB_WINDOW_H: u32 = 500;
+const SUB_WINDOW_W: u32 = 500;
+
 fn main() {
     nannou::app(model).update(update).event(event).run();
 }
 
 struct Model {
-    //attractor: Attractor<LorenzAttractor>,
+    attractor: Attractor<LorenzAttractor>,
     //attractor: Attractor<HalvorsenAttractor>,
-    attractor: Attractor<ThomasAttractor>,
+    //attractor: Attractor<ThomasAttractor>,
     minutes: u64,
 }
 
@@ -25,6 +28,12 @@ fn model(app: &App) -> Model {
         .size(WINDOW_W, WINDOW_H)
         .visible(!RECORDING)
         .view(view)
+        .build()
+        .unwrap();
+
+    app.new_window()
+        .size(SUB_WINDOW_W, SUB_WINDOW_H)
+        .view(sub_view)
         .build()
         .unwrap();
 
@@ -56,7 +65,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
 
     model.attractor.draw(&draw);
 
-    if app.elapsed_frames() < 60 * 5 {
+    if app.elapsed_frames() < 60 * 5 && RECORDING {
         draw.text("←←← Drag or Swipe →→→")
             .width(WINDOW_W as f32)
             .center_justify()
@@ -69,6 +78,18 @@ fn view(app: &App, model: &Model, frame: Frame) {
     if RECORDING {
         save_frame(app);
     }
+}
+
+fn sub_view(app: &App, _model: &Model, frame: Frame) {
+    let draw = app.draw();
+
+    draw.background().color(GRAY);
+
+    let fps = app.duration.updates_per_second();
+    draw.text(&format!("{:.1}", fps))
+        .color(BLACK);
+
+    draw.to_frame(app, &frame).unwrap();
 }
 
 #[allow(dead_code)]
