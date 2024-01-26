@@ -1,29 +1,29 @@
+use std::collections::LinkedList;
+
 use nannou::{glam::Vec3Swizzles, prelude::*};
 
 use super::AttractorParam;
 
 pub(super) struct Particle {
-    orbit: Vec<Vec3A>,
-    last: Vec3A,
+    orbit: LinkedList<Vec3A>,
 }
 
 impl Particle {
     pub(super) fn new<Param: AttractorParam>() -> Self {
-        let last = Param::random_point();
+        let mut list = LinkedList::new();
+        list.push_back(Param::random_point());
 
         Particle {
-            orbit: vec![last; Param::ORBIT_LEN],
-            last,
+            orbit: list,
         }
     }
 
     pub(super) fn update<Param: AttractorParam>(&mut self) {
-        let last = Param::make_next(&self.last);
-        self.orbit.push(last);
-        self.last = last;
+        let last = Param::make_next(&self.orbit.back().unwrap());
+        self.orbit.push_back(last);
 
         if self.orbit.len() > Param::ORBIT_LEN {
-            self.orbit.remove(0);
+            self.orbit.pop_front();
         }
     }
 
