@@ -1,20 +1,20 @@
-use std::collections::LinkedList;
+use std::collections::VecDeque;
 
 use nannou::{glam::Vec3Swizzles, prelude::*};
 
 use super::AttractorParam;
 
 pub(super) struct Particle {
-    orbit: LinkedList<Vec3A>,
+    orbit: VecDeque<Vec3A>,
 }
 
 impl Particle {
     pub(super) fn new<Param: AttractorParam>() -> Self {
-        let mut list = LinkedList::new();
+        let mut list = VecDeque::with_capacity(Param::ORBIT_LEN + 1);
         list.push_back(Param::random_point());
 
         Particle {
-            orbit: list,
+            orbit: list
         }
     }
 
