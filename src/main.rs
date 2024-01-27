@@ -31,11 +31,13 @@ fn model(app: &App) -> Model {
         .build()
         .unwrap();
 
-    app.new_window()
-        .size(SUB_WINDOW_W, SUB_WINDOW_H)
-        .view(sub_view)
-        .build()
-        .unwrap();
+    if !RECORDING {
+        app.new_window()
+            .size(SUB_WINDOW_W, SUB_WINDOW_H)
+            .view(sub_view)
+            .build()
+            .unwrap();
+    }
 
     Model {
         attractor: Attractor::new(),
@@ -85,11 +87,18 @@ fn sub_view(app: &App, _model: &Model, frame: Frame) {
 
     draw.background().color(GRAY);
 
+    let frame_num = app.elapsed_frames();
+    let minutes = frame_num / (60 * 60);
+    let seconds = frame_num % (60 * 60) / 60;
+
     draw.text(&format!(
-        "FPS: {:.1}\nframe: {}",
+        "FPS: {:.1}\nframe: {}\n{:0} m {:02} s",
         app.duration.updates_per_second(),
-        app.elapsed_frames()
+        frame_num,
+        minutes,
+        seconds,
     ))
+    .font_size(40)
     .color(BLACK);
 
     draw.to_frame(app, &frame).unwrap();
