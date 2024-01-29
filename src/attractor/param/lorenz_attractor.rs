@@ -31,6 +31,10 @@ impl AttractorParam for LorenzAttractor {
     const ROTAION_Y: f32 = 7.9;
     const ROTAION_Z: f32 = 1.3;
 
+    const COLOR_R: u8 = 180;
+    const COLOR_G: u8 = 0;
+    const COLOR_B: u8 = 0;
+
     fn new() -> Self {
         LorenzAttractor {}
     }

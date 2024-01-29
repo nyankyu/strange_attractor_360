@@ -38,6 +38,10 @@ pub(crate) trait AttractorParam {
     const ROTAION_Y: f32;
     const ROTAION_Z: f32;
 
+    const COLOR_R: u8;
+    const COLOR_G: u8;
+    const COLOR_B: u8;
+
     fn new() -> Self;
     fn random_point() -> Vec3A;
     fn make_next(p: &Vec3A) -> Vec3A;

@@ -50,7 +50,7 @@ impl Particle {
             let color = if depth < 0.2 {
                 rgba8(0, 0, 0, 0)
             } else {
-                rgba8(180, 0, 0, 255)
+                rgba8(Param::COLOR_R, Param::COLOR_G, Param::COLOR_B, 255)
             };
             let weight = 2.0 * (Param::ORBIT_WEIGHT2 / depth).atan();
 
