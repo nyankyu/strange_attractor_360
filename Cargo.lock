@@ -1844,7 +1844,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "strange_attractor"
+name = "strange_attractor_360"
 version = "0.1.0"
 dependencies = [
  "nannou",
