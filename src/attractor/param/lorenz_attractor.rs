@@ -9,22 +9,23 @@ const RHO: f32 = 28.0;
 pub(crate) struct LorenzAttractor {}
 
 impl AttractorParam for LorenzAttractor {
-    const ORBIT_NUM: usize = 800;
+    const ORBIT_NUM: usize = 40;
     const ORBIT_LEN: usize = 600;
+    const DRAW_SKIP: usize = Self::ORBIT_LEN * 2;
     const ORBIT_WEIGHT: f32 = 20.0 / WINDOW_H as f32;
     const ORBIT_WEIGHT2: f32 = Self::ORBIT_WEIGHT / 2.0;
 
     const DELTA_T: f32 = 0.001;
 
-    const CAMERA_X: f32 = 0.0;
+    const CAMERA_X: f32 = -10.0;
     const CAMERA_Y: f32 = 0.0;
-    const CAMERA_Z: f32 = 20.0;
+    const CAMERA_Z: f32 = 15.0;
 
     const CENTER_X: f32 = 0.0;
     const CENTER_Y: f32 = 0.0;
-    const CENTER_Z: f32 = 10.0;
+    const CENTER_Z: f32 = 15.0;
 
-    const DELTA_THETA: f32 = 0.0003;
+    const DELTA_THETA: f32 = 0.0006;
 
     const ROTAION_X: f32 = 1.0;
     const ROTAION_Y: f32 = 7.9;

@@ -18,6 +18,7 @@ const SCALE: f32 = crate::WINDOW_H as f32 / PI;
 pub(crate) trait AttractorParam {
     const ORBIT_NUM: usize;
     const ORBIT_LEN: usize;
+    const DRAW_SKIP: usize;
 
     const DELTA_T: f32;
 
@@ -57,7 +58,13 @@ impl<Param: AttractorParam> Attractor<Param> {
         Attractor {
             _param: Param::new(),
             orbits: (0..Param::ORBIT_NUM)
-                .map(|_| Particle::new::<Param>())
+                .map(|_| {
+                    let mut particle = Particle::new::<Param>();
+                    for _ in 0..Param::DRAW_SKIP {
+                        particle.update::<Param>();
+                    }
+                    particle
+                })
                 .collect(),
             theta: 0.0,
             rotation: Mat3A::ZERO,

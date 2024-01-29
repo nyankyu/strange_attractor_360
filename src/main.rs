@@ -17,41 +17,35 @@ fn main() {
 }
 
 struct Model {
-    attractor: Attractor<LorenzAttractor>,
-    //attractor: Attractor<HalvorsenAttractor>,
+    window_id: WindowId,
+    //attractor: Attractor<LorenzAttractor>,
+    attractor: Attractor<HalvorsenAttractor>,
     //attractor: Attractor<ThomasAttractor>,
-    minutes: u64,
 }
 
 fn model(app: &App) -> Model {
-    app.new_window()
+    let id = app.new_window()
         .size(WINDOW_W, WINDOW_H)
         .visible(!RECORDING)
         .view(view)
         .build()
         .unwrap();
 
-    if !RECORDING {
-        app.new_window()
-            .size(SUB_WINDOW_W, SUB_WINDOW_H)
-            .view(sub_view)
-            .build()
-            .unwrap();
-    }
+    app.new_window()
+        .size(SUB_WINDOW_W, SUB_WINDOW_H)
+        .view(sub_view)
+        .build()
+        .unwrap();
 
     Model {
+        window_id: id,
         attractor: Attractor::new(),
-        minutes: 0,
     }
 }
 
 fn update(app: &App, model: &mut Model, _update: Update) {
     let minutes = app.elapsed_frames() / 60 / 60;
-    if model.minutes < minutes {
-        model.minutes = minutes;
-        print!("{}, ", minutes);
-    }
-    if minutes >= 5 {
+    if minutes > 10 {
         exit(0);
     }
 
@@ -78,7 +72,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     draw.to_frame(app, &frame).unwrap();
 
     if RECORDING {
-        save_frame(app);
+        save_frame(app, model.window_id);
     }
 }
 
@@ -105,7 +99,7 @@ fn sub_view(app: &App, _model: &Model, frame: Frame) {
 }
 
 #[allow(dead_code)]
-fn save_frame(app: &App) {
+fn save_frame(app: &App, id: WindowId) {
     let frame_num = app.elapsed_frames();
 
     let path = app
@@ -115,5 +109,5 @@ fn save_frame(app: &App) {
         .join(frame_num.to_string())
         .with_extension("png");
 
-    app.main_window().capture_frame(path);
+    app.window(id).unwrap().capture_frame(path);
 }
