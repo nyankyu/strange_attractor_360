@@ -1,8 +1,10 @@
-use nannou::prelude::*;
-use crate::WINDOW_H;
 use crate::AttractorParam;
+use crate::WINDOW_H;
+use nannou::glam::const_mat3a;
+use nannou::prelude::*;
 
 const A: f32 = 1.4;
+const MAT: Mat3A = const_mat3a!([-A, -4.0, -4.0], [-4.0, -A, -4.0], [-4.0, -4.0, -A]);
 
 pub(crate) struct HalvorsenAttractor {}
 
@@ -46,9 +48,7 @@ impl AttractorParam for HalvorsenAttractor {
     }
 
     fn make_next(p: &Vec3A) -> Vec3A {
-        let dx = -vec3a(A, 4.0, 4.0).dot(*p) - p.y * p.y;
-        let dy = -vec3a(4.0, A, 4.0).dot(*p) - p.z * p.z;
-        let dz = -vec3a(4.0, 4.0, A).dot(*p) - p.x * p.x;
-        *p + vec3a(dx, dy, dz) * Self::DELTA_T
+        let d = MAT * *p - vec3a(p.y * p.y, p.z * p.z, p.x * p.x);
+        *p + d * Self::DELTA_T
     }
 }
