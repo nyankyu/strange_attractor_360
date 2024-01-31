@@ -1,6 +1,9 @@
-use nannou::prelude::*;
-use crate::WINDOW_H;
+use std::marker::PhantomData;
+
 use crate::AttractorParam;
+use crate::WINDOW_H;
+use nannou::glam::const_vec3a;
+use nannou::prelude::*;
 
 const B: f32 = 0.20;
 
@@ -15,13 +18,8 @@ impl AttractorParam for ThomasAttractor {
 
     const DELTA_T: f32 = 0.05;
 
-    const CAMERA_X: f32 = -1.0;
-    const CAMERA_Y: f32 = 0.0;
-    const CAMERA_Z: f32 = 0.0;
-
-    const CENTER_X: f32 = -4.0;
-    const CENTER_Y: f32 = 0.0;
-    const CENTER_Z: f32 = 0.0;
+    const CAMERA: Vec3A = const_vec3a!([-1.0, 0.0, 0.0]);
+    const CENTER: Vec3A = const_vec3a!([-4.0, 0.0, 0.0]);
 
     const DELTA_THETA: f32 = 0.0002;
 
@@ -29,9 +27,15 @@ impl AttractorParam for ThomasAttractor {
     const ROTAION_Y: f32 = 7.9;
     const ROTAION_Z: f32 = 1.3;
 
-    const COLOR_R: u8 = 100;
-    const COLOR_G: u8 = 180;
-    const COLOR_B: u8 = 0;
+    const COLOR: Rgba8 = Rgba8 {
+        color: Rgb {
+            red: 100,
+            green: 180,
+            blue: 0,
+            standard: PhantomData,
+        },
+        alpha: 255,
+    };
 
     fn new() -> Self {
         ThomasAttractor {}

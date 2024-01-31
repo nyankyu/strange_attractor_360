@@ -1,6 +1,8 @@
 mod param;
 mod particle;
 
+use std::marker::PhantomData;
+
 use nannou::glam::Vec3Swizzles;
 use nannou::prelude::*;
 
@@ -22,13 +24,9 @@ pub(crate) trait AttractorParam {
 
     const DELTA_T: f32;
 
-    const CAMERA_X: f32;
-    const CAMERA_Y: f32;
-    const CAMERA_Z: f32;
-
-    const CENTER_X: f32;
-    const CENTER_Y: f32;
-    const CENTER_Z: f32;
+    /// direction right: +y, left: -y, top: +z, bottom: -z, front: +x, back: -x
+    const CAMERA: Vec3A;
+    const CENTER: Vec3A;
 
     const ORBIT_WEIGHT: f32;
     const ORBIT_WEIGHT2: f32;
@@ -38,9 +36,7 @@ pub(crate) trait AttractorParam {
     const ROTAION_Y: f32;
     const ROTAION_Z: f32;
 
-    const COLOR_R: u8;
-    const COLOR_G: u8;
-    const COLOR_B: u8;
+    const COLOR: Rgba8;
 
     fn new() -> Self;
     fn random_point() -> Vec3A;
@@ -48,37 +44,32 @@ pub(crate) trait AttractorParam {
 }
 
 pub(crate) struct Attractor<Param: AttractorParam> {
-    _param: Param,
-    orbits: Vec<Particle>,
+    _param: PhantomData<fn() -> Param>,
+    orbits: Vec<Particle<Param>>,
     theta: f32,
     rotation: Mat3A,
-    /// direction right: +y, left: -y, top: +z, bottom: -z, front: +x, back: -x
-    camera: Vec3A,
-    center: Vec3A,
 }
 
 impl<Param: AttractorParam> Attractor<Param> {
     pub(crate) fn new() -> Self {
         Attractor {
-            _param: Param::new(),
+            _param: PhantomData,
             orbits: (0..Param::ORBIT_NUM)
                 .map(|_| {
-                    let mut particle = Particle::new::<Param>();
+                    let mut particle = Particle::new();
                     for _ in 0..Param::DRAW_SKIP {
-                        particle.update::<Param>();
+                        particle.update();
                     }
                     particle
                 })
                 .collect(),
             theta: 0.0,
             rotation: Mat3A::ZERO,
-            camera: vec3a(Param::CAMERA_X, Param::CAMERA_Y, Param::CAMERA_Z),
-            center: vec3a(Param::CENTER_X, Param::CENTER_Y, Param::CENTER_Z),
         }
     }
 
     pub(crate) fn update(&mut self) {
-        self.orbits.iter_mut().for_each(|p| p.update::<Param>());
+        self.orbits.iter_mut().for_each(|p| p.update());
         self.theta += Param::DELTA_THETA;
         self.rotation = Mat3A::from_euler(
             nannou::glam::EulerRot::ZYX,
@@ -89,19 +80,19 @@ impl<Param: AttractorParam> Attractor<Param> {
     }
     pub(crate) fn draw(&self, draw: &Draw) {
         let draw = draw.scale(SCALE);
-        self.orbits.iter().for_each(|particle| {
-            particle.draw::<Param>(&draw, self.rotation, self.center, self.camera)
-        });
+        self.orbits
+            .iter()
+            .for_each(|particle| particle.draw(&draw, self.rotation));
         if !crate::RECORDING {
-            self.draw_axis(&draw);
+            self.draw_axis::<Param>(&draw);
         }
     }
 
-    fn draw_axis(&self, draw: &Draw) {
-        let origin = self.coordinate(&Vec3A::ZERO);
-        let axis_x = self.coordinate(&vec3a(500.0, 0.0, 0.0));
-        let axis_y = self.coordinate(&vec3a(0.0, 500.0, 0.0));
-        let axis_z = self.coordinate(&vec3a(0.0, 0.0, 500.0));
+    fn draw_axis<AttractorParam>(&self, draw: &Draw) {
+        let origin = self.coordinate::<Param>(&Vec3A::ZERO);
+        let axis_x = self.coordinate::<Param>(&vec3a(500.0, 0.0, 0.0));
+        let axis_y = self.coordinate::<Param>(&vec3a(0.0, 500.0, 0.0));
+        let axis_z = self.coordinate::<Param>(&vec3a(0.0, 0.0, 500.0));
 
         draw.line()
             .start(origin)
@@ -122,12 +113,12 @@ impl<Param: AttractorParam> Attractor<Param> {
             .color(WHITE);
     }
 
-    fn coordinate(&self, p: &Vec3A) -> Vec2 {
-        let rotated = self.rotation * (*p - self.center);
-        let dist_xy = self.camera.xy().distance(rotated.xy());
-        let longitude =
-            ((rotated.x - self.camera.x) / dist_xy).acos() * (rotated.y - self.camera.y).signum();
-        let latitude = ((rotated.z - self.camera.z) / dist_xy).atan();
+    fn coordinate<AttractorParam>(&self, p: &Vec3A) -> Vec2 {
+        let rotated = self.rotation * (*p - Param::CENTER);
+        let dist_xy = Param::CAMERA.xy().distance(rotated.xy());
+        let longitude = ((rotated.x - Param::CAMERA.x) / dist_xy).acos()
+            * (rotated.y - Param::CAMERA.y).signum();
+        let latitude = ((rotated.z - Param::CAMERA.z) / dist_xy).atan();
 
         vec2(longitude, latitude)
     }

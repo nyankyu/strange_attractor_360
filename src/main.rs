@@ -4,7 +4,7 @@ use attractor::*;
 use nannou::prelude::*;
 use std::process::exit;
 
-const RECORDING: bool = true;
+const RECORDING: bool = false;
 
 const WINDOW_H: u32 = if RECORDING { 2160 } else { 800 };
 const WINDOW_W: u32 = WINDOW_H * 2;
