@@ -1,5 +1,3 @@
-use std::marker::PhantomData;
-
 use crate::AttractorParam;
 use crate::WINDOW_H;
 use nannou::glam::const_mat3a;
@@ -30,12 +28,7 @@ impl AttractorParam for HalvorsenAttractor {
     const ROTAION_Z: f32 = 1.3;
 
     const COLOR: Rgba8 = Rgba8 {
-        color: Rgb {
-            red: 0,
-            green: 100,
-            blue: 180,
-            standard: PhantomData,
-        },
+        color: DODGERBLUE,
         alpha: 255,
     };
 

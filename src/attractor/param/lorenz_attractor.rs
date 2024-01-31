@@ -1,9 +1,7 @@
-use std::marker::PhantomData;
-
+use crate::AttractorParam;
+use crate::WINDOW_H;
 use nannou::glam::const_vec3a;
 use nannou::prelude::*;
-use crate::WINDOW_H;
-use crate::AttractorParam;
 
 const SIGMA: f32 = 10.0;
 const BETA: f32 = 8.0 / 3.0;
@@ -12,7 +10,7 @@ const RHO: f32 = 28.0;
 pub(crate) struct LorenzAttractor {}
 
 impl AttractorParam for LorenzAttractor {
-    const ORBIT_NUM: usize = 40;
+    const ORBIT_NUM: usize = 400;
     const ORBIT_LEN: usize = 600;
     const DRAW_SKIP: usize = Self::ORBIT_LEN * 2;
     const ORBIT_WEIGHT: f32 = 20.0 / WINDOW_H as f32;
@@ -30,12 +28,7 @@ impl AttractorParam for LorenzAttractor {
     const ROTAION_Z: f32 = 1.3;
 
     const COLOR: Rgba8 = Rgba8 {
-        color: Rgb {
-            red: 180,
-            green: 0,
-            blue: 0,
-            standard: PhantomData,
-        },
+        color: RED,
         alpha: 255,
     };
 

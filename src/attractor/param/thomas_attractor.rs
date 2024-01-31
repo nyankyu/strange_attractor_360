@@ -1,5 +1,3 @@
-use std::marker::PhantomData;
-
 use crate::AttractorParam;
 use crate::WINDOW_H;
 use nannou::glam::const_vec3a;
@@ -28,12 +26,7 @@ impl AttractorParam for ThomasAttractor {
     const ROTAION_Z: f32 = 1.3;
 
     const COLOR: Rgba8 = Rgba8 {
-        color: Rgb {
-            red: 100,
-            green: 180,
-            blue: 0,
-            standard: PhantomData,
-        },
+        color: LIMEGREEN,
         alpha: 255,
     };
 
