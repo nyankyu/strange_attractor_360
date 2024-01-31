@@ -7,9 +7,9 @@ const B: f32 = 0.20;
 pub(crate) struct ThomasAttractor {}
 
 impl AttractorParam for ThomasAttractor {
-    const ORBIT_NUM: usize = 1000;
+    const ORBIT_NUM: usize = 2000;
     const ORBIT_LEN: usize = 100;
-    const DRAW_SKIP: usize = Self::ORBIT_LEN * 2;
+    const DRAW_SKIP: usize = Self::ORBIT_LEN * 7;
     const ORBIT_WEIGHT: f32 = 6.0 / WINDOW_H as f32;
     const ORBIT_WEIGHT2: f32 = Self::ORBIT_WEIGHT / 2.0;
 
@@ -19,7 +19,7 @@ impl AttractorParam for ThomasAttractor {
     const CAMERA_Y: f32 = 0.0;
     const CAMERA_Z: f32 = 0.0;
 
-    const CENTER_X: f32 = -5.0;
+    const CENTER_X: f32 = -4.0;
     const CENTER_Y: f32 = 0.0;
     const CENTER_Z: f32 = 0.0;
 
@@ -29,7 +29,7 @@ impl AttractorParam for ThomasAttractor {
     const ROTAION_Y: f32 = 7.9;
     const ROTAION_Z: f32 = 1.3;
 
-    const COLOR_R: u8 = 0;
+    const COLOR_R: u8 = 100;
     const COLOR_G: u8 = 180;
     const COLOR_B: u8 = 0;
 

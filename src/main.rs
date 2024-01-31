@@ -4,7 +4,7 @@ use attractor::*;
 use nannou::prelude::*;
 use std::process::exit;
 
-const RECORDING: bool = false;
+const RECORDING: bool = true;
 
 const WINDOW_H: u32 = if RECORDING { 2160 } else { 800 };
 const WINDOW_W: u32 = WINDOW_H * 2;
@@ -19,8 +19,8 @@ fn main() {
 struct Model {
     window_id: WindowId,
     //attractor: Attractor<LorenzAttractor>,
-    attractor: Attractor<HalvorsenAttractor>,
-    //attractor: Attractor<ThomasAttractor>,
+    //attractor: Attractor<HalvorsenAttractor>,
+    attractor: Attractor<ThomasAttractor>,
 }
 
 fn model(app: &App) -> Model {
