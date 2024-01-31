@@ -4,7 +4,7 @@ use nannou::{glam::Vec3Swizzles, prelude::*};
 
 use super::AttractorParam;
 
-const TRANSPARENCY: Rgba8 = Rgba8 {
+const TRANSPARENT: Rgba8 = Rgba8 {
     color: BLACK,
     alpha: 0,
 };
@@ -49,7 +49,7 @@ impl<Param: AttractorParam> Particle<Param> {
             }
 
             let color = if depth < 0.2 {
-                TRANSPARENCY
+                TRANSPARENT
             } else {
                 Param::COLOR
             };
