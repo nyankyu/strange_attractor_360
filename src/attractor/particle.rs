@@ -4,6 +4,11 @@ use nannou::{glam::Vec3Swizzles, prelude::*};
 
 use super::AttractorParam;
 
+const TRANSPARENCY: Rgba8 = Rgba8 {
+    color: BLACK,
+    alpha: 0,
+};
+
 pub(super) struct Particle<Param: AttractorParam> {
     _param: PhantomData<fn() -> Param>,
     orbit: VecDeque<Vec3A>,
@@ -44,7 +49,7 @@ impl<Param: AttractorParam> Particle<Param> {
             }
 
             let color = if depth < 0.2 {
-                rgba8(0, 0, 0, 0)
+                TRANSPARENCY
             } else {
                 Param::COLOR
             };
